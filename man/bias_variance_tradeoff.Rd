@@ -4,7 +4,7 @@
 \alias{bias_variance_tradeoff}
 \title{Create bias-variance tradeoff plot}
 \usage{
-bias_variance_tradeoff(f, sigma, n, df_values = 1:15, resamples = 100)
+bias_variance_tradeoff(f, sigma, n, df_values = 2:15, resamples = 100)
 }
 \arguments{
 \item{f}{The true function}
