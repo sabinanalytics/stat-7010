@@ -2,8 +2,10 @@ Package: stat7010
 Title: A Collection of Functions for STAT 7010
 Version: 0.0.0.9100
 Authors@R: 
-    person("Eugene", "Katsevich", , "ekatsevi@wharton.upenn.edu", role = c("aut", "cre"))
-    person("Paul", "Sabin", , "psabin88@wharton.upenn.edu", role = c("aut"))
+    c(
+      person("Paul", "Sabin", , "psabin88@wharton.upenn.edu", role = c("aut", "cre")),
+      person("Eugene", "Katsevich", , "ekatsevi@wharton.upenn.edu", role = c("aut"))
+      )
 Description: A collection of functions for STAT 7010.
 License: MIT + file LICENSE
 Encoding: UTF-8
