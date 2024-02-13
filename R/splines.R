@@ -395,19 +395,35 @@ cross_validate_spline <- function(x, y, nfolds, df_values) {
   results <- train_data |> dplyr::bind_cols(out_of_fold_predictions)
 
   # compute the CV estimate and standard error
+  # cv_table <- results |>
+  #   tidyr::pivot_longer(-c(x, y, fold),
+  #     names_to = "df",
+  #     names_prefix = "y_hat_",
+  #     names_transform = list(df = as.integer),
+  #     values_to = "yhat"
+  #   ) |>
+  #   dplyr::summarise(cv_fold = mean((yhat - y)^2), .by = c(df, fold)) |> # CV estimates per fold
+  #   dplyr::summarise(
+  #     cv_mean = mean(cv_fold),
+  #     cv_se = stats::sd(cv_fold) / sqrt(nfolds),
+  #     .by = df
+  #   )
   cv_table <- results |>
-    tidyr::pivot_longer(-c(x, y, fold),
+    tidyr::pivot_longer(
+      -c(x, y, fold),
       names_to = "df",
       names_prefix = "y_hat_",
       names_transform = list(df = as.integer),
-      values_to = "yhat"
-    ) |>
-    dplyr::summarise(cv_fold = mean((yhat - y)^2), .by = c(df, fold)) |> # CV estimates per fold
+      values_to = "yhat") |>
+    group_by(df, fold) |>
     dplyr::summarise(
-      cv_mean = mean(cv_fold),
-      cv_se = stats::sd(cv_fold) / sqrt(nfolds),
-      .by = df
-    )
+      cv_fold = mean((yhat - y)^2)
+    ) |>
+    ungroup() |>
+    group_by(df) |>
+    summarize(cv_mean = mean(cv_fold),
+              cv_se = stats::sd(cv_fold)/sqrt(nfolds)) |>
+    ungroup()
 
   df.min <- cv_table |>
     dplyr::filter(cv_mean == min(cv_mean)) |>
